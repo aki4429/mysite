@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>{{title}}</title>
+    <link rel = "stylesheet"
+      href="{url_for('static', filename='style.css')}" >
+    <!--
+    <style>
+        body{margin:10px;}
+        h1 {color:lightgray; font-size:30pt;}
+        p {font-size:16pt;}
+    </style>
+  -->
+</head>
+<body>
+    <h1>{{title}}</h1>
+    <p>{{msg}}</p>
+	<form action="/" method="post">
+    <div>
+			<input type="text" name="field">
+    </div>
+
+    <div>
+    	<input type="checkbox" name="check" value="ck1">
+    	<label for="ck1"> Checkbox</label>
+    </div>
+    
+    <div>
+    	<input type="radio" name="radio" value="A" >
+    	<label for="r1"> readio 1</label>
+    </div>
+    <div><input type="radio" name="radio" value="B" id="r2">
+		<label for="r2"> radio 2</label>   
+    </div>
+    <div>
+		<select name="sel" multiple>
+		<option label="Orange">Orange</option>
+		<option value="Grape" label="Grape">Grape</option>	
+		<option value="Lemon" label="Lemon">Lemon</option>	
+		</select>    
+    </div>
+    <div>
+		<input type="submit">    
+    </div>
+	</form>   
+
+</body>
+
+</html>

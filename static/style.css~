@@ -1,0 +1,27 @@
+body {
+  margin: 10px;
+  background-color: skyblue;
+}
+h1 {
+  color: darkblue;
+  font-size: 24pt;
+  margin: 2px;
+  width: 480px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+h2 {
+	color: darkred;
+	font-size: 14pt;
+	border-left-style: solid;
+	border-left-width: 0.3em;
+	padding-left: 0.3em;
+	background-color: beige;
+}
+p {
+  font-size: 12pt;
+  text-align: left;
+  line-height: 1.5em;
+  color:#555555;
+}

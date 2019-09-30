@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<h1 class="text-secondary">{{title|upper}}</h1>
+<h2>{{msg}}</h4>
+
+<a href="/"> メニューへ戻る </a>
+<div>
+	<form method="post" action="/code">
+		品番:<input type="text" name="kensaku" >
+		tfccode:<input type="text" name="code" >
+		<input type="submit" value="検索">
+	</form>
+</div>
+
+<table class="table-light table-striped">
+	<thead>
+		<tr>
+			<td>ID</td>
+			<td>code</td>
+			<td>description</td>
+			<td>price</td>
+			<td>u.vol</td>
+		</tr>
+	</thead>
+	<tbody>
+	{% for item in data %}
+		<tr>
+			<th>{{item.id}}</th>
+			<td>{{item.hinban}}</td>
+			<td>{{item.description}}</td>
+			<td>{{item.uprice}}</td>		
+			<td>{{item.vol}}</td>
+		</tr>
+	{% endfor %}
+	</tbody>
+</table>	
+
+{% endblock %}
+
+
