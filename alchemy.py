@@ -75,6 +75,8 @@ def code():
                            title = "TFCコード表示",
                            msg = "TFCコード表を表示します。")
 
-    db.close()
-app.debug = True
-app.run(host='0.0.0.0', port='8000')
+    #db.close()
+
+if __name__ == '__main__':
+    app.debug = True
+    app.run(host='0.0.0.0', port='8000')
