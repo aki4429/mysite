@@ -12,7 +12,11 @@ app = Flask(__name__)
 
 Base = declarative_base()
 
-engine = create_engine('sqlite:///tfc.sqlite')
+
+if __name__ == '__main__':
+    engine = create_engine('sqlite:///tfc.sqlite')
+else:
+    engine = create_engine('sqlite:///mysite/tfc.sqlite')
 
 #Model Class
 class TfcCode(Base):
