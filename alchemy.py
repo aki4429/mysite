@@ -8,9 +8,13 @@ from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
 
+from flask_bootstrap import Bootstrap
+
 app = Flask(__name__)
+bootstrap = Bootstrap(app)
 
 Base = declarative_base()
+
 
 
 if __name__ == '__main__':
