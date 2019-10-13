@@ -1,0 +1,53 @@
+{% extends "layout.html" %}
+
+{% set active_page = "/code" %}
+
+{% block content %}
+ {{ super() }}
+
+<div class="col-md-2 sidebar">
+          <aside>
+            <h4>TFCコードメニュー</h4>
+            <ul class="list-unstyled">
+              <li><a href="/code">検索</a></li>
+              <li><a href="/edit">編集</a></li>
+              <li><a href="">Link</a></li>
+              <li><a href="">Link</a></li>
+              <li><a href="">Link</a></li>
+            </ul>
+          </aside>
+          
+          <aside>
+            <h4>新着記事</h4>
+            <ul class="list-unstyled">
+              <li><a href="">記事のタイトルタイトル</a></li>
+              <li><a href="">記事のタイトルタイトル</a></li>
+              <li><a href="">記事のタイトルタイトル</a></li>
+              <li><a href="">記事のタイトルタイトル</a></li>
+              <li><a href="">記事のタイトルタイトル</a></li>
+            </ul>
+          </aside>
+</div><!--/.sidebar-->
+<div class="col-md-10 content-area">
+
+
+<div class="display-3 text-black-50 bg-secondary pl-3">{{msg}}</div>
+
+<!-- <a href="/"> メニューへ戻る </a> -->
+<div>
+	<form method="post" action="/edit">
+		<p>hinban:<input type="text" name="hinban" value="{{data.hinban}}" >
+		<p>item:<input type="text" name="item" value="{{data.item}}" >
+		<p>description:<input type="text" name="description" value="{{data.description}}" >
+		<p>remarks:<input type="text" name="remarks" value="{{data.remarks}}" >
+		<p>unit:<input type="text" name="unit" value="{{data.unit}}">
+		<p>hukla code:<input type="text" name="hcode" >
+		<p>u.price:<input type="text" name="uprice" value="{{data.uprice}}" >
+		<input type="submit" value="更新">
+	</form>
+</div>
+
+
+{% endblock %}
+
+

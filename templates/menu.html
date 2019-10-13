@@ -2,6 +2,7 @@
 {% set active_page = "/" %}
 
 {% block content %}
+{{super()}}
 <h1 class="p-2 display-3 text-primary w-120 text-center">{{title|upper}}</h1>
 <h2 class="p-1 m-1 text-secondary display-6">{{msg}}</h2>
 <p>{{msg}}</p>

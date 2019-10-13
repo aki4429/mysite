@@ -56,11 +56,21 @@ def getAll():
     ses.close()
     return res
 
-def searchHin(hin, item):
+def getOne(id):
+    Session = sessionmaker(bind=engine)
+    ses = Session()
+    res = ses.query(TfcCode).filter(TfcCode.id == id).one()
+    ses.close()
+    return res
+
+def searchHin(hin, item, description, hcode):
     Session = sessionmaker(bind=engine)
     ses = Session()
     res = ses.query(TfcCode).filter(TfcCode.hinban.like('%{0}%'.format(hin)),
-            TfcCode.hinban.like('%{0}%'.format(item))).all()
+            TfcCode.item.like('%{0}%'.format(item)),
+            TfcCode.description.like('%{0}%'.format(description)),
+            TfcCode.hcode.like('%{0}%'.format(hcode)),
+            ).all()
     ses.close()
     return res
 
@@ -89,17 +99,25 @@ def code():
     #db=sqlite3.connect("tfc.sqlite")
     #cur = db.execute("select id, hinban, description, uprice, vol from tfc_code")
     #items=cur.fetchall()
-    hinban = request.form.get("kensaku")
-    item = request.form.get("code")
+    hinban = request.form.get("hinban")
+    item = request.form.get("item")
+    description = request.form.get("description")
+    hcode = request.form.get("hcode")
     #items = getAll()
-    items = searchHin(hinban, item)
+    items = searchHin(hinban, item, description, hcode)
     return render_template('clist.html',
                            data = items,
-                           title = "TFCコード表示",
-                           msg = "TFCコード表を表示します。",
-                           tfc='class="active"')
+                           msg = "TFCコード検索")
 
     #db.close()
+
+@app.route('/edit/<id>', methods=['POSt', 'GET'])
+@check_logged_in
+def edit(id):
+    res = getOne(id)
+    return render_template('edit.html',
+                           data = res,
+                           msg = "TFCコード編集")
 
 if __name__ == '__main__':
     app.debug = True

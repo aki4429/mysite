@@ -3,6 +3,12 @@
 lang="ja"
 {% endblock html_attribs %}
 
+{%- block styles %}
+	{{ super() }}
+    <!-- static/style.css -->
+    <link href="{{url_for('static', filename='style.css')}}" rel="stylesheet">
+{%- endblock styles %}
+
 {% block metas %}
 <meta name="generator" content="Bluefish 2.2.10" >
 <meta name="author" content="Akiyoshi Oda" >
@@ -19,7 +25,7 @@ lang="ja"
 
 {% block navbar %}
 <!-- 1.ナビゲーションバーの設定 -->
-<nav class="navbar navbar-default">
+<nav class="navbar navbar-inverse">
     <div class="container">
         <!-- 2.ヘッダ情報 -->
 	{% set active_page = active_page|default('/') -%}
@@ -31,16 +37,23 @@ lang="ja"
 		<li {% if "/" == active_page %} class="active"{% endif
     %}><a href="/">メニュー</a></li>
 		<li {% if "/code" == active_page %} class="active"{% endif
-    %}><a href="/code">TFCコード編集</a></li>
+    %}><a href="/code">TFCコード</a></li>
 		<li {% if "/code" == active_page %} class="active"{% endif
     %}><a href="/order">発注</a></li>
         </ul>
-        <!-- 4.ボタン -->
+        <!-- 4.ボタン 
         <button type="button" class="btn btn-default navbar-btn">
             <span class="glyphicon glyphicon-envelope"></span>
         </button>
+	-->
     </div>
 </nav>
+{% endblock %}
 
+{% block content %}
+<div class="row bg-dark">
+        <div class="subtitle"> TFC管理メニュー [HUKLA JAPAN -調達G-] </div>
+</div>
+<div class="row">
 
 {% endblock %}

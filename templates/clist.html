@@ -3,14 +3,43 @@
 {% set active_page = "/code" %}
 
 {% block content %}
-<h1 class="text-secondary">{{title|upper}}</h1>
-<h2>{{msg}}</h4>
+ {{ super() }}
 
-<a href="/"> メニューへ戻る </a>
+<div class="col-md-2 sidebar">
+          <aside>
+            <h4>カテゴリへのリンク</h4>
+            <ul class="list-unstyled">
+              <li><a href="">Link</a></li>
+              <li><a href="">Link</a></li>
+              <li><a href="">Link</a></li>
+              <li><a href="">Link</a></li>
+              <li><a href="">Link</a></li>
+            </ul>
+          </aside>
+          
+          <aside>
+            <h4>新着記事</h4>
+            <ul class="list-unstyled">
+              <li><a href="">記事のタイトルタイトル</a></li>
+              <li><a href="">記事のタイトルタイトル</a></li>
+              <li><a href="">記事のタイトルタイトル</a></li>
+              <li><a href="">記事のタイトルタイトル</a></li>
+              <li><a href="">記事のタイトルタイトル</a></li>
+            </ul>
+          </aside>
+</div><!--/.sidebar-->
+<div class="col-md-10 content-area">
+
+
+<div class="display-3 text-black-50 bg-secondary pl-3">{{msg}}</div>
+
+<!-- <a href="/"> メニューへ戻る </a> -->
 <div>
 	<form method="post" action="/code">
-		品番:<input type="text" name="kensaku" >
-		tfccode:<input type="text" name="code" >
+		hinban:<input type="text" name="hinban" >
+		item:<input type="text" name="item" >
+		description:<input type="text" name="description" >
+		hukla code:<input type="text" name="hcode" >
 		<input type="submit" value="検索">
 	</form>
 </div>
@@ -18,25 +47,41 @@
 <table class="table-light table-striped">
 	<thead>
 		<tr>
-			<td>ID</td>
-			<td>code</td>
-			<td>description</td>
-			<td>price</td>
-			<td>u.vol</td>
+			<td >ID</td>
+			<td >Hinban</td>
+			<td >item</td>
+			<td >description</td>
+			<td >remarks</td>
+			<td >unit</td>
+			<td >uprice</td>
+			<td >u.vol</td>
+			<td >zaiko</td>
+			<td >kento</td>
+			<td >hcode</td>
+			<td >cat</td>
 		</tr>
 	</thead>
 	<tbody>
 	{% for item in data %}
 		<tr>
-			<th>{{item.id}}</th>
+			<th><a href="/edit/{{item.id}}">
+						{{item.id}}</a></th>
 			<td>{{item.hinban}}</td>
+			<td>{{item.item}}</td>
 			<td>{{item.description}}</td>
+			<td>{{item.remarks}}</td>
+			<td>{{item.unit}}</td>		
 			<td>{{item.uprice}}</td>		
 			<td>{{item.vol}}</td>
+			<td>{{item.zaiko}}</td>
+			<td>{{item.kento}}</td>
+			<td>{{item.hcode}}</td>
+			<td>{{item.cat}}</td>
 		</tr>
 	{% endfor %}
 	</tbody>
 </table>	
+</div>
 
 {% endblock %}
 
