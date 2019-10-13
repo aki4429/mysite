@@ -23,7 +23,7 @@ Base = declarative_base()
 if __name__ == '__main__':
     engine = create_engine('sqlite:///tfc.sqlite')
 else:
-    engine = create_engine('sqlite:///mysite/tfc.sqlite')
+    engine = create_engine('sqlite:///anywhere/tfc.sqlite')
 
 #Model Class
 class TfcCode(Base):
@@ -63,13 +63,11 @@ def getOne(id):
     ses.close()
     return res
 
-def searchHin(hin, item, description, hcode):
+def searchHin(hin, description):
     Session = sessionmaker(bind=engine)
     ses = Session()
     res = ses.query(TfcCode).filter(TfcCode.hinban.like('%{0}%'.format(hin)),
-            TfcCode.item.like('%{0}%'.format(item)),
             TfcCode.description.like('%{0}%'.format(description)),
-            TfcCode.hcode.like('%{0}%'.format(hcode)),
             ).all()
     ses.close()
     return res
@@ -100,11 +98,9 @@ def code():
     #cur = db.execute("select id, hinban, description, uprice, vol from tfc_code")
     #items=cur.fetchall()
     hinban = request.form.get("hinban")
-    item = request.form.get("item")
     description = request.form.get("description")
-    hcode = request.form.get("hcode")
     #items = getAll()
-    items = searchHin(hinban, item, description, hcode)
+    items = searchHin(hinban, description)
     return render_template('clist.html',
                            data = items,
                            msg = "TFCコード検索")
