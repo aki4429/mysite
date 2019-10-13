@@ -1,17 +1,20 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, session, redirect
 import sqlite3
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
 
+from checker import check_logged_in
+
 from flask_bootstrap import Bootstrap
 
 app = Flask(__name__)
 bootstrap = Bootstrap(app)
+app.secret_key = '++--**%$$#&,,,.tttjkwoudHH'
 
 Base = declarative_base()
 
@@ -61,15 +64,27 @@ def searchHin(hin, item):
     ses.close()
     return res
 
+@app.route('/login', methods=['POST', 'GET'])
+def login():
+    if request.method == 'POST':
+        session['username'] = request.form['username']
+        session['password'] = request.form['password']
+        return redirect('/')
+    else:
+        return render_template('login.html')
+
 
 @app.route('/')
+@check_logged_in
 def menu():
     return render_template('menu.html',
                            data = [["TFCコード編集","code"],[ "発注", "order"]],
                            title ="最初のメニュー",
-                           msg ="メニュー項目から選んでください。")
+                           msg ="メニュー項目から選んでください。",
+                           menu='class="active"')
 
 @app.route('/code', methods=['POSt', 'GET'])
+@check_logged_in
 def code():
     #db=sqlite3.connect("tfc.sqlite")
     #cur = db.execute("select id, hinban, description, uprice, vol from tfc_code")
@@ -81,7 +96,8 @@ def code():
     return render_template('clist.html',
                            data = items,
                            title = "TFCコード表示",
-                           msg = "TFCコード表を表示します。")
+                           msg = "TFCコード表を表示します。",
+                           tfc='class="active"')
 
     #db.close()
 
