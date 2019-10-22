@@ -33,9 +33,14 @@ KEEP納期データをアップロードしてください。
 {{nfiles}}
 </p>
 
-<h4>
-msg: {{msg}}
-</h4>
+<h5>
+メッセージ: {{msg}}
+</h5>
+<p>
+<form method = "post" action = "/keep" >
+<input type = "submit" value = "削除" name="keep_del">
+</form>
+</p>
 <p>
 <form method = "post" action = "/keep" >
 <input type = "submit" value = "更新">

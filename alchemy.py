@@ -122,6 +122,17 @@ def keep():
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             msg += 'ファイル:' + file.filename + 'を保存しました。'
 
+        if request.form.get('keep_del') =='削除':
+            os.chdir(os.path.join(app.config['UPLOAD_FOLDER'], 'keikaku'))
+            for f in kfiles:
+                os.remove(f)
+            os.chdir('../..')
+            os.chdir(os.path.join(app.config['UPLOAD_FOLDER'], 'noki'))
+            for f in nfiles:
+                os.remove(f)
+            os.chdir('../..')
+
+
     return render_template('keep.html',
                            title ="KEEP納期書込み",
                            msg = msg,
