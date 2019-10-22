@@ -155,8 +155,11 @@ def result():
 @app.route('/UP/result/<path:filename>')
 def download_file(filename):
     print("filename=", filename)
-    return send_from_directory('./UP/result/',
-                               filename, as_attachment=True)
+    if __name__ == '__main__':
+        return send_from_directory('./UP/result/', filename, as_attachment=True)
+    else:
+        return send_from_directory('/home/huklajapan/UP/result/', filename, as_attachment=True)
+
 
 @app.route('/code', methods=['POSt', 'GET'])
 @check_logged_in
