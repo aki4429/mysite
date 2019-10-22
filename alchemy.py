@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from flask import Flask, render_template, request, session, redirect
+from flask import Flask, render_template, request, session, redirect, flash, url_for, send_from_directory
+from werkzeug.utils import secure_filename
 import sqlite3
+import os
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import sessionmaker
@@ -12,13 +14,16 @@ from checker import check_logged_in
 
 from flask_bootstrap import Bootstrap
 
+import write_noki
+
 app = Flask(__name__)
 bootstrap = Bootstrap(app)
 app.secret_key = '++--**%$$#&,,,.tttjkwoudHH'
 
 Base = declarative_base()
 
-
+UPLOAD_FOLDER = './UP'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 if __name__ == '__main__':
     engine = create_engine('sqlite:///tfc.sqlite')
@@ -86,10 +91,72 @@ def login():
 @check_logged_in
 def menu():
     return render_template('menu.html',
-                           data = [["TFCコード編集","code"],[ "発注", "order"]],
-                           title ="最初のメニュー",
+                           data = [["TFCコード編集","code"],[ "KEEP納期書込み", "keep"]],
+                           title ="調達メニュー",
                            msg ="メニュー項目から選んでください。",
                            menu='class="active"')
+
+@app.route('/keep', methods=['POST', 'GET'])
+@check_logged_in
+def keep():
+    #変換結果ファイルを削除しておきます。
+    rfiles=os.listdir(os.path.join(app.config['UPLOAD_FOLDER'], 'result'))
+    os.chdir(os.path.join(app.config['UPLOAD_FOLDER'], 'result'))
+    for f in rfiles:
+        os.remove(f)
+    os.chdir('../..')
+    msg=""
+    kfiles=os.listdir(os.path.join(app.config['UPLOAD_FOLDER'], 'keikaku'))
+    nfiles=os.listdir(os.path.join(app.config['UPLOAD_FOLDER'], 'noki'))
+    if request.method == 'POST':
+        # check if the post request has the file part
+        if 'keikaku' in request.files:
+            file = request.files['keikaku']
+            filename = os.path.join('keikaku', file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            msg += 'ファイル:' + file.filename + 'を保存しました。'
+
+        if 'noki' in request.files:
+            file = request.files['noki']
+            filename = os.path.join('noki', file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            msg += 'ファイル:' + file.filename + 'を保存しました。'
+
+    return render_template('keep.html',
+                           title ="KEEP納期書込み",
+                           msg = msg,
+                           kfiles = kfiles,
+                           nfiles = nfiles,
+                           len_k = len(kfiles),
+                           len_n = len(nfiles)
+                           )
+
+@app.route('/result', methods=['POST'])
+@check_logged_in
+def result():
+    kfiles=os.listdir(os.path.join(app.config['UPLOAD_FOLDER'], 'keikaku'))
+    nfiles=os.listdir(os.path.join(app.config['UPLOAD_FOLDER'], 'noki'))
+    if len(kfiles) > 0 and len(nfiles) > 0 :
+        filename = write_noki.write_noki()
+        os.chdir(os.path.join(app.config['UPLOAD_FOLDER'], 'keikaku'))
+        for f in kfiles:
+            os.remove(f)
+        os.chdir('../..')
+        os.chdir(os.path.join(app.config['UPLOAD_FOLDER'], 'noki'))
+        for f in nfiles:
+            os.remove(f)
+        os.chdir('../..')
+
+        return render_template('result.html', 
+                filename = filename)
+    else:
+        return redirect /keep
+
+@app.route('/UP/result/<path:filename>')
+def download_file(filename):
+    print("filename=", filename)
+    return send_from_directory('./UP/result/',
+                               filename, as_attachment=True)
 
 @app.route('/code', methods=['POSt', 'GET'])
 @check_logged_in

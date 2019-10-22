@@ -1,0 +1,57 @@
+{% extends "layout.html" %}
+{% set active_page = "/keep" %}
+
+{% block content %}
+{{super()}}
+
+<div class="row">
+
+<div class="display-3">
+KEEP納期の書込み
+</div>
+<div class="display-4">
+受注No.が合致する、KEEPデータの「伝票摘要」を生産計画の「備考」へ上書きします。
+</div>
+<li>
+生産計画ファイルをアップロードしてください。
+</li>
+<form method = "post" enctype = "multipart/form-data" action="/keep">
+<p><input type="file" name = "keikaku">
+<input type = "submit" value = "生産計画ファイル送信">
+</form>
+<p>
+{{kfiles}}
+</p>
+<li>
+KEEP納期データをアップロードしてください。
+</li>
+<form method = "post" enctype = "multipart/form-data" action="/keep">
+<p><input type="file" name = "noki">
+<input type = "submit" value = "納期データファイル送信">
+</form>
+<p>
+{{nfiles}}
+</p>
+
+<h4>
+msg: {{msg}}
+</h4>
+<p>
+<form method = "post" action = "/keep" >
+<input type = "submit" value = "更新">
+</form>
+</p>
+
+{% if len_k >0 and len_n > 0 %}
+
+<form method = "post" action = "/result" >
+<input type = "submit" value = "納期データ書込み">
+</form>
+
+{% endif %}
+
+</div>
+</div>
+
+{% endblock %}
+

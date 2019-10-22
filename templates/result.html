@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+{% set active_page = "/keep" %}
+
+{% block content %}
+{{super()}}
+
+<div class="row">
+
+<div class="display-3">
+KEEP納期の書込み結果
+</div>
+<div class="display-4">
+KEEP納期を生産計画ファイルに書込みました。
+</div>
+<li>
+生産計画ファイルをダウンロードしてください。
+</li>
+<a href='/UP/result/{{filename}}' download='{{filename}}'>ダウンロード</a>
+</div>
+</div>
+
+{% endblock %}
+
