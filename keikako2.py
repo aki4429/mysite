@@ -10,10 +10,12 @@ import glob
 
 #kei = pd.read_csv("../urethane/source/keikaku.csv",encoding="CP932")
 #KFILE = "./source/keikaku.csv"
-RFILE = "./source/remove_list.csv"
-REFILE = "./source/replace_list.csv"
+#RFILE = "./source/remove_list.csv"
+#REFILE = "./source/replace_list.csv"
 
 def go():
+    RFILE = "./source/remove_list.csv"
+    REFILE = "./source/replace_list.csv"
 
     #生産計画ファイル名取得
     kfile = glob.glob('./UP/ukeikaku/*')[0]
@@ -122,8 +124,8 @@ def go():
         #kei=製品コード","計画数","納期","製番" 
         #製品コード",spec,code, "計画数", orderN, "納期"
         #spec2 のC カバー　は除外
-        if not "C" in spec2:
-            kei_1.append([row[0], spec, listrep(code, rp), row[1], row[3], row[2].strftime('%Y/%m/%d')])
+            if not "C" in spec2:
+                kei_1.append([row[0], spec, listrep(code, rp), row[1], row[3], row[2].strftime('%Y/%m/%d')])
 
 #print(kei_1)
 

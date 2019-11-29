@@ -186,15 +186,23 @@ def ures():
     kfiles=os.listdir(os.path.join(app.config['UPLOAD_FOLDER'], 'ukeikaku'))
     if len(kfiles) > 0  :
         filename = keikako2.go()
-        os.chdir(os.path.join(app.config['UPLOAD_FOLDER'], 'keikaku'))
+        os.chdir(os.path.join(app.config['UPLOAD_FOLDER'], 'ukeikaku'))
         for f in kfiles:
             os.remove(f)
         os.chdir('../..')
 
-        return render_template('ures.html', 
+        return render_template('ureres.html', 
                 filename = filename)
     else:
         return redirect /ure
+
+@app.route('/<path:filename>')
+def down_file(filename):
+    print("filename=", filename)
+    if __name__ == '__main__':
+        return send_from_directory('./', filename, as_attachment=True)
+    else:
+        return send_from_directory('./', filename, as_attachment=True)
 
 @app.route('/UP/result/<path:filename>')
 def download_file(filename):
