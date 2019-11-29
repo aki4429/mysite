@@ -185,24 +185,27 @@ def ure():
 def ures():
     kfiles=os.listdir(os.path.join(app.config['UPLOAD_FOLDER'], 'ukeikaku'))
     if len(kfiles) > 0  :
-        filename = keikako2.go()
+        keikako2.go()
+        filename_1='keikaku_new.csv'
+        filename_2='by_code_new.csv'
         os.chdir(os.path.join(app.config['UPLOAD_FOLDER'], 'ukeikaku'))
         for f in kfiles:
             os.remove(f)
         os.chdir('../..')
 
         return render_template('ureres.html', 
-                filename = filename)
+                filename_1 = filename_1, 
+                filename_2 = filename_2 )
     else:
         return redirect /ure
 
-@app.route('/mysite/<path:filename>')
+@app.route('/UP/data/<path:filename>')
 def down_file(filename):
     print("filename=", filename)
     if __name__ == '__main__':
-        return send_from_directory('./', filename, as_attachment=True)
+        return send_from_directory('./UP/data/', filename, as_attachment=True)
     else:
-        return send_from_directory('./home/huklajapan/mysite/', filename, as_attachment=True)
+        return send_from_directory('/home/huklajapan/UP/data/', filename, as_attachment=True)
 
 @app.route('/UP/result/<path:filename>')
 def download_file(filename):

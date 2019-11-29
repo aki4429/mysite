@@ -53,8 +53,8 @@ def go():
         print("計画の日付が２日分でありません")
 
     #無ければ、納期日のデータフォルダを作成
-    dir1 = os.path.join("./data/", dates[0].strftime("%Y%m%d"))
-    dir2 = os.path.join("./data/", dates[1].strftime("%Y%m%d"))
+    dir1 = os.path.join("./UP/data/", dates[0].strftime("%Y%m%d"))
+    dir2 = os.path.join("./UP/data/", dates[1].strftime("%Y%m%d"))
 
     if not os.path.exists(dir1):
         os.mkdir(dir1)
@@ -129,7 +129,7 @@ def go():
 
 #print(kei_1)
 
-    with open(os.path.join(dir1, 'keikaku_new.csv'), "w" ) as f:
+    with open(os.path.join(dir1, 'keikaku_new.csv'), "w", encoding='CP932' ) as f:
         writer = csv.writer(f)
         writer.writerows(kei_1)
 
