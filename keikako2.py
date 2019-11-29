@@ -53,14 +53,16 @@ def go():
         print("計画の日付が２日分でありません")
 
     #無ければ、納期日のデータフォルダを作成
-    dir1 = os.path.join("./UP/data/", dates[0].strftime("%Y%m%d"))
-    dir2 = os.path.join("./UP/data/", dates[1].strftime("%Y%m%d"))
+    #dir1 = os.path.join("./UP/data/", dates[0].strftime("%Y%m%d"))
+    #dir2 = os.path.join("./UP/data/", dates[1].strftime("%Y%m%d"))
+    day_1 = dates[0].strftime("%Y%m%d")
+    day_2 = dates[1].strftime("%Y%m%d")
 
-    if not os.path.exists(dir1):
-        os.mkdir(dir1)
+    #if not os.path.exists(dir1):
+    #    os.mkdir(dir1)
 
-    if not os.path.exists(dir2):
-        os.mkdir(dir2)
+    #if not os.path.exists(dir2):
+    #    os.mkdir(dir2)
 
     remlist =[]
 
@@ -129,7 +131,7 @@ def go():
 
 #print(kei_1)
 
-    with open(os.path.join(dir1, 'keikaku_new.csv'), "w", encoding='CP932' ) as f:
+    with open(os.path.join('./UP/data', 'keikaku_new.csv'), "w", encoding='CP932' ) as f:
         writer = csv.writer(f)
         writer.writerows(kei_1)
 
@@ -158,11 +160,10 @@ def go():
         row[:0] =[i + 1]
         i += 1
 
-    with open(os.path.join(dir1, 'by_code_new.csv'), "w", encoding='CP932' ) as f:
+    with open(os.path.join('./UP/data', 'by_code_new.csv'), "w", encoding='CP932' ) as f:
         writer = csv.writer(f)
         writer.writerows(bylist)
 
-    return os.path.join(dir1, 'by_code_new.csv')
 
 
 
