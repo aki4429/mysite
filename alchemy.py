@@ -196,13 +196,13 @@ def ures():
     else:
         return redirect /ure
 
-@app.route('/<path:filename>')
+@app.route('/mysite/<path:filename>')
 def down_file(filename):
     print("filename=", filename)
     if __name__ == '__main__':
         return send_from_directory('./', filename, as_attachment=True)
     else:
-        return send_from_directory('./', filename, as_attachment=True)
+        return send_from_directory('./home/huklajapan/mysite/', filename, as_attachment=True)
 
 @app.route('/UP/result/<path:filename>')
 def download_file(filename):
