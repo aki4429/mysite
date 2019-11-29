@@ -15,6 +15,7 @@ from checker import check_logged_in
 from flask_bootstrap import Bootstrap
 
 import write_noki
+import keikako2
 
 app = Flask(__name__)
 bootstrap = Bootstrap(app)
@@ -91,7 +92,7 @@ def login():
 @check_logged_in
 def menu():
     return render_template('menu.html',
-                           data = [["TFCコード編集","code"],[ "KEEP納期書込み", "keep"]],
+                           data = [["TFCコード編集","code"],[ "KEEP納期書込み", "keep"], ["ウレタン発注","ure"]],
                            title ="調達メニュー",
                            msg ="メニュー項目から選んでください。",
                            menu='class="active"')
@@ -163,6 +164,38 @@ def result():
     else:
         return redirect /keep
 
+@app.route('/ure', methods=['POST', 'GET'])
+@check_logged_in
+def ure():
+    #kfile=os.listdir(os.path.join(app.config['UPLOAD_FOLDER'], 'ukeikaku'))[0]
+    msg=""
+    if request.method == 'POST':
+        # check if the post request has the file part
+        if 'ukeikaku' in request.files:
+            file = request.files['ukeikaku']
+            filename = os.path.join('ukeikaku', file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            msg += 'ファイル:' + file.filename + 'を保存しました。'
+
+    return render_template('ure.html',
+                           msg = msg)
+
+@app.route('/ures', methods=['POST'])
+@check_logged_in
+def ures():
+    kfiles=os.listdir(os.path.join(app.config['UPLOAD_FOLDER'], 'ukeikaku'))
+    if len(kfiles) > 0  :
+        filename = keikako2.go()
+        os.chdir(os.path.join(app.config['UPLOAD_FOLDER'], 'keikaku'))
+        for f in kfiles:
+            os.remove(f)
+        os.chdir('../..')
+
+        return render_template('ures.html', 
+                filename = filename)
+    else:
+        return redirect /ure
+
 @app.route('/UP/result/<path:filename>')
 def download_file(filename):
     print("filename=", filename)
@@ -170,7 +203,6 @@ def download_file(filename):
         return send_from_directory('./UP/result/', filename, as_attachment=True)
     else:
         return send_from_directory('/home/huklajapan/UP/result/', filename, as_attachment=True)
-
 
 @app.route('/code', methods=['POSt', 'GET'])
 @check_logged_in

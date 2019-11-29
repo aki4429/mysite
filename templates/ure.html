@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+{% set active_page = "/ure" %}
+
+{% block content %}
+{{super()}}
+
+<div class="row">
+
+<div class="display-3">
+ウレタン発注
+</div>
+<div class="display-4">
+生産計画(製造仕様書)から、ウレタン発注数を計算します。
+</div>
+<li>
+生産計画ファイルをアップロードしてください。
+</li>
+<form method = "post" enctype = "multipart/form-data" action="/ure">
+<p><input type="file" name = "ukeikaku">
+<input type = "submit" value = "生産計画ファイル送信">
+</form>
+
+<h5>
+メッセージ: {{msg}}
+</h5>
+
+<form method = "post" action = "/ures" >
+<input type = "submit" value = "発注データ作成">
+</form>
+
+</div>
+</div>
+
+{% endblock %}
+

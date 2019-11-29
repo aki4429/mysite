@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+{% set active_page = "/ure" %}
+
+{% block content %}
+{{super()}}
+
+<div class="row">
+
+<div class="display-3">
+ウレタン注文ファイル
+</div>
+<div class="display-4">
+ウレタン注文用ファイルができました。
+</div>
+<li>
+ファイルをダウンロードしてください。
+</li>
+<a href='/UP/result/{{filename}}' download='{{filename}}'>ダウンロード</a>
+</div>
+</div>
+
+{% endblock %}
+
