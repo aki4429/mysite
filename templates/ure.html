@@ -19,9 +19,21 @@
 <p><input type="file" name = "ukeikaku">
 <input type = "submit" value = "生産計画ファイル送信">
 </form>
+<h5>
+メッセージ: {{msg1}}
+</h5>
+
+<li>
+受注データファイルをアップロードしてください。
+</li>
+
+<form method = "post" enctype = "multipart/form-data" action="/ure">
+<p><input type="file" name = "juchu">
+<input type = "submit" value = "受注ファイル送信">
+</form>
 
 <h5>
-メッセージ: {{msg}}
+メッセージ: {{msg2}}
 </h5>
 
 <form method = "post" action = "/ures" >

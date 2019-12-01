@@ -168,34 +168,47 @@ def result():
 @check_logged_in
 def ure():
     #kfile=os.listdir(os.path.join(app.config['UPLOAD_FOLDER'], 'ukeikaku'))[0]
-    msg=""
+    msg1=""
+    msg2=""
     if request.method == 'POST':
         # check if the post request has the file part
         if 'ukeikaku' in request.files:
             file = request.files['ukeikaku']
             filename = os.path.join('ukeikaku', file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            msg += 'ファイル:' + file.filename + 'を保存しました。'
+            msg1 += 'ファイル:' + file.filename + 'を保存しました。'
+
+        if 'juchu' in request.files:
+            file = request.files['juchu']
+            filename = os.path.join('juchu', file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            msg2 += 'ファイル:' + file.filename + 'を保存しました。'
 
     return render_template('ure.html',
-                           msg = msg)
+                           msg1 = msg1,
+                           msg2 = msg2)
 
 @app.route('/ures', methods=['POST'])
 @check_logged_in
 def ures():
     kfiles=os.listdir(os.path.join(app.config['UPLOAD_FOLDER'], 'ukeikaku'))
-    if len(kfiles) > 0  :
-        keikako2.go()
-        filename_1='keikaku_new.csv'
-        filename_2='by_code_new.csv'
+    jfiles=os.listdir(os.path.join(app.config['UPLOAD_FOLDER'], 'juchu'))
+    if len(kfiles) > 0 and len(jfiles) > 0 :
+        files = keikako2.go()
         os.chdir(os.path.join(app.config['UPLOAD_FOLDER'], 'ukeikaku'))
         for f in kfiles:
             os.remove(f)
         os.chdir('../..')
+        os.chdir(os.path.join(app.config['UPLOAD_FOLDER'], 'juchu'))
+        for f in jfiles:
+            os.remove(f)
+        os.chdir('../..')
 
         return render_template('ureres.html', 
-                filename_1 = filename_1, 
-                filename_2 = filename_2 )
+                keiname_1 = files[0], 
+                keiname_2 = files[1],
+                by_name = files[2] ,
+                jucname = files[3] )
     else:
         return redirect /ure
 
