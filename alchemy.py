@@ -162,7 +162,7 @@ def result():
         return render_template('result.html', 
                 filename = filename)
     else:
-        return redirect /keep
+        return redirect('/keep')
 
 @app.route('/ure', methods=['POST', 'GET'])
 @check_logged_in
@@ -210,13 +210,13 @@ def ures():
             os.remove(f)
         os.chdir('../..')
 
-        return render_template('ureres.html', 
-                keiname_1 = files[0], 
-                keiname_2 = files[1],
-                by_name = files[2] ,
-                jucname = files[3] )
+        return render_template('ureres.html', keiname_1 = files[0], 
+                keiname_2 = files[1], 
+                by_name = files[2] , 
+                jucname = files[3])
+
     else:
-        return redirect /ure
+        return redirect('/ure')
 
 @app.route('/UP/data/<path:filename>')
 def down_file(filename):
