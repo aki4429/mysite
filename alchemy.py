@@ -167,7 +167,13 @@ def result():
 @app.route('/ure', methods=['POST', 'GET'])
 @check_logged_in
 def ure():
-    #kfile=os.listdir(os.path.join(app.config['UPLOAD_FOLDER'], 'ukeikaku'))[0]
+    dfiles=os.listdir(os.path.join(app.config['UPLOAD_FOLDER'], 'data'))
+    os.chdir(os.path.join(app.config['UPLOAD_FOLDER'], 'data'))
+    for f in dfiles:
+        os.remove(f)
+
+    os.chdir('../..')
+
     msg1=""
     msg2=""
     if request.method == 'POST':
