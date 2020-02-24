@@ -31,7 +31,7 @@ if __name__ == '__main__':
     engine2 = create_engine('sqlite:///se.sqlite')
 else:
     engine = create_engine('sqlite:///anywhere/tfc.sqlite')
-    engine2 = create_engine('sqlite:///se.sqlite')
+    engine2 = create_engine('sqlite:///mysite/se.sqlite')
 
 #Model Class
 class TfcCode(Base):
