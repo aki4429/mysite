@@ -31,11 +31,13 @@ def go():
     kei=[] #計画データ用変数
 
     #計画ファイル読み込み"製品コード","計画数","納期","製番" = 1, 6, 5. 4
+    #shiji 規格23 製番55 製造開始日27 製品数 35 = 23, 35, 27, 55
     with open(kfile, encoding='CP932') as f:
         reader = csv.reader(f)
         next(reader) #ヘッダ行は飛ばす
         for row in reader:
-            kei.append([row[1], row[6].strip(), s2d(row[5]), row[4].split("-")[0]])
+            kei.append([row[23], row[35].strip(), s2d(row[27]), row[55].split("-")[0]])
+            #kei.append([row[1], row[6].strip(), s2d(row[5]), row[4].split("-")[0]])
 
 
     #受注日を変数に代入
@@ -214,7 +216,7 @@ def go():
     bycode = {}
     cd = ""
 
-    for row in kei_1:
+    for row in kei_2:
         if row[2] in bycode:
             bycode[row[2]] = [bycode[row[2]][0] + int(float(row[3])), 
                     min(bycode[row[2]][1], row[4])]
