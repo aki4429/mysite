@@ -28,8 +28,10 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 if __name__ == '__main__':
     engine = create_engine('sqlite:///tfc.sqlite')
+    engine2 = create_engine('sqlite:///se.sqlite')
 else:
     engine = create_engine('sqlite:///anywhere/tfc.sqlite')
+    engine2 = create_engine('sqlite:///se.sqlite')
 
 #Model Class
 class TfcCode(Base):
@@ -78,6 +80,62 @@ def searchHin(hin, description):
     ses.close()
     return res
 
+#Model Sebango Class
+class SeBango(Base):
+    """
+    背番号テーブルクラス
+    """
+
+    # テーブル名
+    __tablename__ = 'sebango'
+
+    # 個々のカラムを定義
+    id = Column(Integer, primary_key=True)
+    hcode = Column(String)
+    se = Column(String)
+    scode = Column(String)
+    sname = Column(String)
+
+def searchSe(hcode, se, scode, sname):
+    Session = sessionmaker(bind=engine2)
+    ses = Session()
+    res = ses.query(SeBango).filter(SeBango.hcode.like('%{0}%'.format(hcode)), 
+            SeBango.se.like('%{0}%'.format(se)),
+            SeBango.scode.like('%{0}%'.format(scode)),
+            SeBango.sname.like('%{0}%'.format(sname)),
+            ).all()
+    ses.close()
+    return res
+
+def getSone(id):
+    Session = sessionmaker(bind=engine2)
+    ses = Session()
+    res = ses.query(SeBango).filter(SeBango.id == id).one()
+    ses.close()
+    return res
+
+@app.route('/updateSe/<id>', methods=['POSt'])
+def updateSe(id):
+    Session = sessionmaker(bind=engine2)
+    ses = Session()
+    data = ses.query(SeBango).filter(SeBango.id == id).one()
+    hcode = request.form.get("hcode")
+    se = request.form.get("se")
+    scode = request.form.get("scode")
+    sname = request.form.get("sname")
+    data.hcode = hcode
+    data.se = se
+    data.scode = scode
+    data.sname = sname
+    ses.add(data)
+    ses.commit()
+    items = searchSe(hcode, se, scode, sname)
+    #res = getSone(id)
+    ses.close()
+    return render_template('selist.html', 
+            data = items,  msg = "背番号検索")
+
+
 @app.route('/login', methods=['POST', 'GET'])
 def login():
     if request.method == 'POST':
@@ -92,7 +150,7 @@ def login():
 @check_logged_in
 def menu():
     return render_template('menu.html',
-                           data = [["TFCコード編集","code"],[ "KEEP納期書込み", "keep"], ["ウレタン発注","ure"]],
+                           data = [["背番号検索","se"],[ "KEEP納期書込み", "keep"], ["ウレタン発注","ure"]],
                            title ="調達メニュー",
                            msg ="メニュー項目から選んでください。",
                            menu='class="active"')
@@ -257,6 +315,26 @@ def edit(id):
     return render_template('edit.html',
                            data = res,
                            msg = "TFCコード編集")
+
+@app.route('/se', methods=['POSt', 'GET'])
+@check_logged_in
+def se():
+    hcode = request.form.get("hcode")
+    se = request.form.get("se")
+    scode = request.form.get("scode")
+    sname = request.form.get("sname")
+    items = searchSe(hcode, se, scode, sname)
+    return render_template('selist.html',
+                           data = items,
+                           msg = "背番号検索")
+
+@app.route('/sedit/<id>', methods=['POSt', 'GET'])
+@check_logged_in
+def sedit(id):
+    res = getSone(id)
+    return render_template('sedit.html',
+                           data = res,
+                           msg = "背番号編集")
 
 if __name__ == '__main__':
     app.debug = True
