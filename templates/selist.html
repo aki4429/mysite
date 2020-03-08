@@ -12,6 +12,10 @@
 
 <!-- <a href="/"> メニューへ戻る </a> -->
 <div>
+	<a href="/senew/{{max_id}}"> 新規{{max_id}} </a> 
+</div>
+<div>
+
 	<form method="post" action="/se">
 		品番:<input type="text" name="hcode" size="20" >
 		背番号:<input type="text" name="se" size="10" >
@@ -28,18 +32,26 @@
 			<td >フクラコード</td>
 			<td >背番号</td>
 			<td >仕入先コード</td>
-			<td >仕入作名</td>
+			<td >仕入先名</td>
+			<td >編集</td>
+			<td >コピー</td>
+			<td >削除</td>
 		</tr>
 	</thead>
 	<tbody>
 	{% for item in data %}
 		<tr>
-			<th><a href="/sedit/{{item.id}}">
-						{{item.id}}</a></th>
+			<td>{{item.id}}</a></td>
 			<td>{{item.hcode}}</td>
 			<td>{{item.se}}</td>
 			<td>{{item.scode}}</td>
 			<td>{{item.sname}}</td>
+			<td><a href="/sedit/{{item.id}}">
+						編集</a></td>
+			<td><a href="/secopy/{{item.id}}">
+						copy</a></td>
+			<td><a href="/delse/{{item.id}}">
+						削除</a></td>
 		</tr>
 	{% endfor %}
 	</tbody>

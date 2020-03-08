@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+
+{% set active_page = "/se" %}
+
+{% block content %}
+ {{ super() }}
+
+<div class="col-md-10 content-area">
+
+
+<div class="display-3 text-black-50 bg-secondary pl-3">{{msg}}</div>
+
+<!-- <a href="/"> メニューへ戻る </a> -->
+<div>
+	<form method="post" action="/senew/{{max_id}}">
+		<p>フクラコード:<input type="text" name="hcode"  >
+		<p>背番号:<input type="text" name="se" >
+		<p>仕入先コード:<input type="text" name="scode" >
+		<p>仕入先名:<input type="text" name="sname" >
+		<input type="submit" value="新規">
+	</form>
+</div>
+
+
+{% endblock %}
+
+

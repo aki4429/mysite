@@ -8,7 +8,7 @@ import os
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, func
 
 from checker import check_logged_in
 
@@ -110,9 +110,36 @@ def searchSe(hcode, se, scode, sname):
 def getSone(id):
     Session = sessionmaker(bind=engine2)
     ses = Session()
-    res = ses.query(SeBango).filter(SeBango.id == id).one()
+    res = ses.query(SeBango).get(id)
     ses.close()
     return res
+
+def getSeMax():
+    """ 
+    背番号DBの次のIDを取り出します。
+    """
+    Session = sessionmaker(bind=engine2)
+    ses = Session()
+    res = ses.query(func.max(SeBango.id)).one()
+    ses.close()
+    return res[0] + 1
+
+def getSeNext(id):
+    """ 
+    そのIDの背番号アルファベットの次の番号を取り出します。
+    """
+    Session = sessionmaker(bind=engine2)
+    ses = Session()
+    sonoDB = ses.query(SeBango).get(id)
+    #背番号アルファベット取り出し
+    al = sonoDB.se[0]
+    se_max = ses.query(func.max(SeBango.se)).\
+        filter(SeBango.se.like('%{0}%'.format(al))).one()
+    ses.close()
+    #数字部分を取り出し1加えて４桁0埋め
+    suuji = str(int(se_max[0].split('-')[1]) + 1).zfill(4)
+    next_se = al + "-" + suuji
+    return next_se
 
 @app.route('/updateSe/<id>', methods=['POSt'])
 def updateSe(id):
@@ -135,6 +162,32 @@ def updateSe(id):
     return render_template('selist.html', 
             data = items,  msg = "背番号検索")
 
+@app.route('/insertSe/<id>', methods=['POSt'])
+def insertSe(id):
+    Session = sessionmaker(bind=engine2)
+    ses = Session()
+    hcode = request.form.get("hcode")
+    se = request.form.get("se")
+    scode = request.form.get("scode")
+    sname = request.form.get("sname")
+    sebango = SeBango(id = id, hcode = hcode, se = se, scode = scode, sname = sname)
+    ses.add(sebango)
+    ses.commit()
+    #res = getSone(id)
+    items = searchSe(hcode, se, scode, sname)
+    ses.close()
+    return render_template('selist.html', 
+            data = items,  msg = "背番号検索")
+
+@app.route('/delSe/<id>', methods=['POSt'])
+def delSe(id):
+    Session = sessionmaker(bind=engine2)
+    ses = Session()
+    data = ses.query(SeBango).get(id)
+    ses.delete(data)
+    ses.commit()
+    ses.close()
+    return render_template('selist.html', msg = "背番号検索")
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
@@ -302,8 +355,10 @@ def code():
     description = request.form.get("description")
     #items = getAll()
     items = searchHin(hinban, description)
+    max_id = getSeMax()
     return render_template('clist.html',
                            data = items,
+                           max_id = max_id,
                            msg = "TFCコード検索")
 
     #db.close()
@@ -335,6 +390,33 @@ def sedit(id):
     return render_template('sedit.html',
                            data = res,
                            msg = "背番号編集")
+
+@app.route('/secopy/<id>', methods=['POSt', 'GET'])
+@check_logged_in
+def secopy(id):
+    res = getSone(id)
+    se_next = getSeNext(id)
+    next_id = getSeMax()
+    return render_template('secopy.html',
+                           data = res,
+                           next_id = next_id,
+                           se_next = se_next,
+                           msg = "背番号コピー")
+
+@app.route('/delse/<id>', methods=['POSt', 'GET'])
+@check_logged_in
+def delse(id):
+    res = getSone(id)
+    return render_template('delse.html',
+                           data = res,
+                           msg = "背番号削除")
+
+@app.route('/senew/<id>', methods=['POSt', 'GET'])
+@check_logged_in
+def senew(id):
+    return render_template('senew.html',
+                           max_id = id,
+                           msg = "新規入力")
 
 if __name__ == '__main__':
     app.debug = True

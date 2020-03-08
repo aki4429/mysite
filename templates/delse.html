@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+
+{% set active_page = "/se" %}
+
+{% block content %}
+ {{ super() }}
+
+<div class="col-md-10 content-area">
+
+
+<div class="display-3 text-black-50 bg-secondary pl-3">{{msg}}</div>
+
+<!-- <a href="/"> メニューへ戻る </a> -->
+<div>
+	<form method="post" action="/delSe/{{data.id}}">
+		<p>フクラコード:{{data.hcode}} </p>
+		<p>背番号:{{data.se}}
+		<p>仕入先コード:{{data.scode}}
+		<p>仕入先名:{{data.sname}}
+		<p> ** データを削除します。**
+		<input type="submit" value="削除">
+	</form>
+</div>
+
+
+{% endblock %}
+
+

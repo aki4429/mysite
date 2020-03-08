@@ -10,7 +10,7 @@ class Winner(Base):
 
   id = Column(Integer, primary_key=True)
   hcode = Column(String)
-  se = Column(String)
+  se = Column(String, unique=True)
   scode = Column(String)
   sname = Column(String)
 
