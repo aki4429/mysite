@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from flask import Flask, render_template, request, session, redirect, flash, url_for, send_from_directory
+from flask import Flask, render_template, request, session, redirect, flash, url_for, send_from_directory, make_response
 from werkzeug.utils import secure_filename
 import sqlite3
 import os
@@ -16,6 +16,9 @@ from flask_bootstrap import Bootstrap
 
 import write_noki
 import keikako2
+import csv
+
+from io import StringIO
 
 app = Flask(__name__)
 bootstrap = Bootstrap(app)
@@ -95,6 +98,9 @@ class SeBango(Base):
     se = Column(String)
     scode = Column(String)
     sname = Column(String)
+
+    def __repr__(self):
+        return [self.id, self.hcode, self.se, self.scode, self.sname]
 
 def searchSe(hcode, se, scode, sname):
     Session = sessionmaker(bind=engine2)
@@ -188,6 +194,26 @@ def delSe(id):
     ses.commit()
     ses.close()
     return render_template('selist.html', msg = "背番号検索")
+
+@app.route('/download/<obj>/')
+def download(obj):
+    Session = sessionmaker(bind=engine2)
+    ses = Session()
+
+    f = StringIO()
+    writer = csv.writer(f, quotechar='"', quoting=csv.QUOTE_ALL, lineterminator="\n")
+
+    if obj == 'sebango':
+        writer.writerow(['id','コード','背番号','仕入先コード','仕入先名'])
+        for u in ses.query(SeBango).all():
+            writer.writerow([u.id, u.hcode,u.se,u.scode,u.sname])
+
+    res = make_response()
+    res.data = f.getvalue().encode('CP932')
+    res.headers['Content-Type'] = 'text/csv'
+    res.headers['Content-Disposition'] = 'attachment; filename='+ obj +'.csv'
+    ses.close()
+    return res
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
